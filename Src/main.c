@@ -17,13 +17,23 @@
  */
 
 #include <stdint.h>
-
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
+#include "f446re_gpio.h"
+#include "f446re_rcc.h"
 
 int main(void)
 {
-    /* Loop forever */
-	for(;;);
+	//Enable clock for GPIOA
+	RCC->AHB1ENR = RCC_AHB1ENR_GPIOA;
+
+	//Set pin 5 at GPIOA MODER register as output
+	GPIOA->MODER |= (GPOM_MODE << 10);
+
+	while(1){
+		//Setting pin5 as high
+		GPIOA->ODR |= (1 << 5);
+
+		//Set low pin5
+		GPIOA->ODR |= (1 << 5);
+
+	}
 }
