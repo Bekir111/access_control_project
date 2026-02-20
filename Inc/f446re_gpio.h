@@ -1,3 +1,8 @@
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//-NEED TO WRITE FUNCTIONS PROTOTYPES
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 #ifndef F446RE_GPIO_H_
 #define F446RE_GPIO_H_
@@ -52,16 +57,19 @@ typedef struct{
 #define		INPUT_MODE			(0x0)
 #define		GPOM_MODE			(0x1)
 #define		AF_MODE				(0x2)
-#define		ANALOG_MODE			(0x2)
+#define		ANALOG_MODE			(0x3)
 
 //GPIO's output type
-#define OTYPE_PP     0x0  // Push-pull
-#define OTYPE_OD     0x1  // Open-drain
+#define 	OTYPE_PP     		0x0  // Push-pull
+#define 	OTYPE_OD     		0x1  // Open-drain
 
 //GPIO's Pull-up, pull-down values
-#define PUPD_NONE    0x00
-#define PUPD_PULLUP  0x01
-#define PUPD_PULLDOWN 0x02
+#define 	PUPD_NONE    		0x00
+#define 	PUPD_PULLUP  		0x01
+#define 	PUPD_PULLDOWN 		0x02
+
+//Functions prototypes for GPIO's
+void GPIO_init();
 
 
 #endif /* F446RE_GPIO_H_ */
