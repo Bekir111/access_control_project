@@ -7,12 +7,13 @@ void GPIO_pin_mode(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t mode){
 	//Set bits
 	GPIOx->MODER |= (mode << (pin*2));
 }
-void GPIO_write_pin(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t state){
+void GPIO_write_pin(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t state)
+{
 	if(state){
-		GPIOx->BSRR = pin;
+		GPIOx->BSRR =  (1 << pin);
 	}
 	else{
-		GPIOx->BSRR = (pin << 16);
+		GPIOx->BSRR = (1 << (16 + pin));
 	}
 }
 void GPIO_pull_up(GPIOx_typeDef* GPIOx, uint8_t pin)

@@ -53,6 +53,11 @@ typedef struct{
 #define 	GPIO_PIN_14			14
 #define 	GPIO_PIN_15			15
 
+//GPIO's states
+#define 	HIGH				1
+#define		LOW					0
+
+
 //GPIO's direction mode
 #define		INPUT_MODE			(0x0)
 #define		GPOM_MODE			(0x1)

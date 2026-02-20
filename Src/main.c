@@ -2,21 +2,23 @@
 #include <stdint.h>
 #include "f446re_gpio.h"
 #include "f446re_rcc.h"
+#include "rcc_driver.h"
+#include "gpio_driver.h"
 
 int main(void)
 {
 	//Enable clock for GPIOA
-	RCC->AHB1ENR = RCC_AHB1ENR_GPIOA;
+	RCC_GPIOA_clock_enable();
 
 	//Set pin 5 at GPIOA MODER register as output
-	GPIOA->MODER |= (GPOM_MODE << 10);
+	GPIO_pin_mode(GPIOA, GPIO_PIN_5, GPOM_MODE);
 
 	while(1){
 		//Setting pin5 as high
-		GPIOA->ODR |= (1 << 5);
+		GPIO_write_pin(GPIOA, GPIO_PIN_5, HIGH);
 
 		//Set low pin5
-		GPIOA->ODR |= (1 << 5);
+		GPIO_write_pin(GPIOA, GPIO_PIN_5, LOW);
 
 	}
 }
