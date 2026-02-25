@@ -32,4 +32,10 @@ void GPIO_pull_down(GPIOx_typeDef* GPIOx, uint8_t pin)
 	//Set bits
 	GPIOx->PUPDR |= (PUPD_PULLDOWN << (pin*2));
 }
+void GPIO_AF_selection_low(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t af_mode){
+		//Clear bits
+		GPIOx->AFRL &= ~(af_mode << (pin * 4));
+		//Set bits
+		GPIOx->AFRL |= (af_mode << (pin * 4));
 
+}

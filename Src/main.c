@@ -25,7 +25,13 @@ int main(void)
 	//Set PA2 as AF mode
 	GPIO_pin_mode(GPIOA, GPIO_PIN_2, AF_MODE);
 	//Set PA3 as AF mode
-	GPIO_pin_mode(GPIOA, GPIO_PIN_2, AF_MODE);
+	GPIO_pin_mode(GPIOA, GPIO_PIN_3, AF_MODE);
+
+	//AF selection for PA2
+	GPIO_AF_selection_low(GPIOA, GPIO_PIN_2, AF7);
+
+	//AF selection for PA3
+	GPIO_AF_selection_low(GPIOA, GPIO_PIN_3, AF7);
 
 	//UART INIT PROTOTYPE
 
