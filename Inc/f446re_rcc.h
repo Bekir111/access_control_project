@@ -51,5 +51,6 @@ typedef struct{
 #define			RCC_AHB1ENR_GPIOA		(1 << 0)
 #define			RCC_AHB1ENR_GPIOB		(1 << 1)
 #define			RCC_AHB1ENR_GPIOC		(1 << 2)
+#define			RCC_APB1ENR_UART2		(1 << 17)
 
 #endif /* F446RE_RCC_H_ */

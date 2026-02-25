@@ -7,6 +7,9 @@
 
 int main(void)
 {
+
+	RCC_UART2_clock_enable();
+
 	//Enable clock for GPIOA
 	RCC_GPIOA_clock_enable();
 
