@@ -4,6 +4,8 @@
 #include "f446re_rcc.h"
 #include "rcc_driver.h"
 #include "gpio_driver.h"
+#include "f446re_uart.h"
+#include "uart_driver.h"
 
 int main(void)
 {
@@ -36,6 +38,8 @@ int main(void)
 	GPIO_pull_up(GPIOA, GPIO_PIN_3);
 
 	//UART INIT PROTOTYPE
+
+	UART_enable(USART2);
 
 	while(1){
 		//Setting pin5 as high

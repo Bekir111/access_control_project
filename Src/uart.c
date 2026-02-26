@@ -3,9 +3,21 @@
 #include "rcc_driver.h"
 #include "gpio_driver.h"
 
+void UART_enable(USARTx_typeDef* USARTx){
+	//UART enable bit clear
+	USARTx->CR1 &= ~(USART_EN);
 
+	//UART enable bit set
+	USARTx->CR1 |= (USART_EN);
+}
 
+void UART_RXIE_enable(USARTx_typeDef* USARTx){
+	//Clear RXIE bits
+	USARTx->CR1 &= ~(UART_CR1_RXNEIE);
 
+	//Set RXIE bits
+	USARTx->CR1 |= (UART_CR1_RXNEIE);
+}
 
 uint8_t UART_data_return(USARTx_typeDef* USARTx){
 
@@ -43,6 +55,8 @@ void UART2_init(void){
 		GPIO_AF_selection_low(GPIOA, GPIO_PIN_3, AF7);
 		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
 		GPIO_pull_up(GPIOA, GPIO_PIN_3);
+
+
 
 
 }
