@@ -22,9 +22,21 @@ typedef struct{
 #define			USART2					((USARTx_typeDef*)USART2_ADDR)
 #define			USART3					((USARTx_typeDef*)USART3_ADDR)
 
+
+//UART Enable macro
+#define			USART_EN				(1U<<13)
 //Macros for receiving, transmitting or both
 #define			USART_MODE_RX			1
 #define			USART_MODE_TX			2
 #define			USART_MODE_TX_RX		3
+
+//Macros for interrupts
+#define 		UART_CR1_RXNEIE			(1U<<5)
+#define 		UART_CR1_IDLEIE			(1U<<4)
+#define 		UART_CR1_TCIE			(1U<<6)
+#define 		UART_CR1_TXEIE			(1U<<7)
+#define 		UART_CR1_PEIE			(1U<<8)
+
+
 
 #endif /* F446RE_UART_H_ */
