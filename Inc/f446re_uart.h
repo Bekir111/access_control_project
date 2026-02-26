@@ -2,6 +2,8 @@
 #ifndef F446RE_UART_H_
 #define F446RE_UART_H_
 
+#include <stdint.h>
+
 #define 		APB1_BASE_ADDR			0x40000000UL
 #define 		USART2_ADDR				(APB1_BASE_ADDR + 0x4400UL)
 #define 		USART3_ADDR				(APB1_BASE_ADDR + 0x4800UL)

@@ -3,7 +3,25 @@
 #include "rcc_driver.h"
 #include "gpio_driver.h"
 
-void
+uint8_t UART_data_return(USARTx_typeDef* USARTx){
+
+	return 0;
+}
+
+void UART_mode(USARTx_typeDef* USARTx, uint8_t TxRx){
+
+	//Clear bits for Receiver enable
+	USARTx->CR1 &= ~(TxRx << 2);
+
+	//Set bits for Receiver enable
+	USARTx->CR1 |= (TxRx << 2);
+
+}
+
+uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
+
+	return 0;
+}
 
 void UART2_init(void){
 		//UART2 clock enable
