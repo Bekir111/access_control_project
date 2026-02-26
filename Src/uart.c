@@ -56,8 +56,14 @@ void UART2_init(void){
 		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
 		GPIO_pull_up(GPIOA, GPIO_PIN_3);
 
+		//Enable UART2
+		UART_enable(USART2);
 
+		//Enable Receive interrupt
+		UART_RXIE_enable(USART2);
 
+		//Set UART to Receive mode only
+		UART_mode(USART2, USART_MODE_RX);
 
 }
 

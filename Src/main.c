@@ -39,8 +39,6 @@ int main(void)
 
 	//UART INIT PROTOTYPE
 
-	UART_enable(USART2);
-
 	while(1){
 		//Setting pin5 as high
 		GPIO_write_pin(GPIOA, GPIO_PIN_5, HIGH);
