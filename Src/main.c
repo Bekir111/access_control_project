@@ -32,6 +32,8 @@ int main(void)
 
 	//AF selection for PA3
 	GPIO_AF_selection_low(GPIOA, GPIO_PIN_3, AF7);
+	//Pull up on RX to prevent floating pin. UART RX idle is HIGH
+	GPIO_pull_up(GPIOA, GPIO_PIN_3);
 
 	//UART INIT PROTOTYPE
 
