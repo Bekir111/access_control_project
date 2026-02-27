@@ -19,10 +19,6 @@ void UART_RXIE_enable(USARTx_typeDef* USARTx){
 	USARTx->CR1 |= (UART_CR1_RXNEIE);
 }
 
-uint8_t UART_data_return(USARTx_typeDef* USARTx){
-
-	return 0;
-}
 
 void UART_mode(USARTx_typeDef* USARTx, uint8_t TxRx){
 
@@ -34,7 +30,17 @@ void UART_mode(USARTx_typeDef* USARTx, uint8_t TxRx){
 
 }
 
+void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t periphClock){
+	USARTx->BRR = (uint16_t)( (periphClock + (baudRate/2)) / baudRate);
+}
+
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
+
+	return 0;
+}
+
+
+uint8_t UART_data_return(USARTx_typeDef* USARTx){
 
 	return 0;
 }
@@ -64,6 +70,8 @@ void UART2_init(void){
 
 		//Set UART to Receive mode only
 		UART_mode(USART2, USART_MODE_RX);
+
+		UART_set_baud_rate(USART2, BAUDE_RATE_115200, PERIPH_CLOCK_TEST);
 
 }
 
