@@ -35,14 +35,15 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 }
 
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
-
-	return 0;
+	return USARTx->SR & (USART_SR_RXNE);
 }
 
 
-uint8_t UART_data_return(USARTx_typeDef* USARTx){
+uint32_t UART_data_return(USARTx_typeDef* USARTx){
+	while(!(UART_check_RXNE_flag(USARTx)));
 
-	return 0;
+	return (USARTx->DR && 0xFF);
+
 }
 
 void UART2_init(void){
@@ -60,7 +61,7 @@ void UART2_init(void){
 		//AF selection for PA3
 		GPIO_AF_selection_low(GPIOA, GPIO_PIN_3, AF7);
 		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
-		GPIO_pull_up(GPIOA, GPIO_PIN_3);
+		//GPIO_pull_up(GPIOA, GPIO_PIN_3);
 
 		//Enable UART2
 		UART_enable(USART2);

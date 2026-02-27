@@ -4,6 +4,9 @@
 #include "gpio_driver.h"
 #include "uart_driver.h"
 
+#define   TEST_DATA			0x00
+
+
 int main(void)
 {
 	//Enable clock for GPIOA
@@ -38,12 +41,17 @@ int main(void)
 
 
 	while(1){
+
+		uint32_t test = UART_data_return(USART2);
+
 		//Setting pin5 as high
 		GPIO_write_pin(GPIOA, GPIO_PIN_5, HIGH);
 		GPIO_write_pin(GPIOA, GPIO_PIN_12, HIGH);
 
 		//Set low pin5
 		GPIO_write_pin(GPIOA, GPIO_PIN_5, LOW);
+
+
 
 	}
 }

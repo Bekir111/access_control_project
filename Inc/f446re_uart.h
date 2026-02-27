@@ -37,6 +37,9 @@ typedef struct{
 #define 		UART_CR1_TXEIE			(1U<<7)
 #define 		UART_CR1_PEIE			(1U<<8)
 
+
+//Status register macros
+#define			USART_SR_RXNE			(1U<<5)
 //Baud rate macros
 #define			BAUDE_RATE_115200		115200
 
