@@ -37,6 +37,13 @@ typedef struct{
 #define 		UART_CR1_TXEIE			(1U<<7)
 #define 		UART_CR1_PEIE			(1U<<8)
 
+//Baud rate macros
+#define			BAUDE_RATE_115200		115200
+
+//Peripheral clock used in prototyping
+#define			PERIPH_CLOCK_TEST		16000000
+
+
 
 
 #endif /* F446RE_UART_H_ */
