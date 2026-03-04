@@ -3,7 +3,7 @@
 #include "rcc_driver.h"
 #include "gpio_driver.h"
 
-					uint8_t		uart_rx_buffer[64];
+					uint8_t		uart_rx_buffer[32];
 		volatile	uint8_t		uart_index = 0;
 extern	volatile	uint8_t		uart_string_ready = 0;
 

@@ -49,5 +49,15 @@ typedef struct{
 
 
 
+typedef struct{
+	uint8_t 	day;
+	uint8_t 	month;
+	uint16_t 	year;
+	uint8_t		hour;
+	uint8_t		minute;
+	uint8_t		reader_validate[12];
+
+}QR_data_t;
+
 
 #endif /* F446RE_UART_H_ */
