@@ -4,6 +4,8 @@
 #include "gpio_driver.h"
 #include "uart_driver.h"
 
+static	QR_data_t	qr1_data;
+static	QR_data_t	qr2_data;
 
 
 
@@ -16,9 +18,8 @@ int main(void)
 	GPIO_pin_mode(GPIOA, GPIO_PIN_5, GPOM_MODE);
 	GPIO_pin_mode(GPIOA, GPIO_PIN_12, GPOM_MODE);
 
-	//USART2 init
+	//USART2 initialization
 	UART2_init();
-
 
 	while(1){
 
@@ -26,7 +27,11 @@ int main(void)
 
 		if(UART_string_ready()){
 			UART_string_ready_clear();
-			GPIO_write_pin(GPIOA, GPIO_PIN_5,HIGH);
+			if(QR_data_parse(uart_rx_buffer, &qr1_data)){
+
+				GPIO_write_pin(GPIOA, GPIO_PIN_5,HIGH);
+
+			}
 		}
 		else{
 			GPIO_write_pin(GPIOA, GPIO_PIN_5,LOW);

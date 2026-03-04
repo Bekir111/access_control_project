@@ -3,9 +3,9 @@
 #include "rcc_driver.h"
 #include "gpio_driver.h"
 
-					uint8_t		uart_rx_buffer[32];
-		volatile	uint8_t		uart_index = 0;
-extern	volatile	uint8_t		uart_string_ready = 0;
+				uint8_t		uart_rx_buffer[32];
+volatile		uint8_t		uart_index = 0;
+volatile		uint8_t		uart_string_ready = 0;
 
 
 void UART_enable(USARTx_typeDef* USARTx){
@@ -73,6 +73,46 @@ uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
 uint8_t UART_data_return(USARTx_typeDef* USARTx){
 
 	return USARTx->DR;
+
+}
+
+uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
+	//Checking the length of the string from start to "TU_STOL"
+	//20:02:2026:13:02:TU_STOL (example)
+	uint8_t len = 0;
+	while (buffer[len] != '\0') len++;
+	if (len < 17) {
+		return 0;
+	}
+
+	//Parsing the days
+	qr_data->day = ((buffer[0] - '0') * 10) + (buffer[1] - '0');
+	/*
+	 * -----EXPLAINING PARSING CALCULATION-------
+	 * Decimal representation of the character '0' is 48
+	 * Every next character after '0' is +1 for example:
+	 * Decimal representation of '1' is 49, '2' is 50 and so on
+	 * So to convert the character into number i use this calculation
+	 * I will use the (example):
+	 * '20' -> '2' and '0'
+	 * ('2'(50) - '0'(48)) * 10 => 20
+	 * ('0'(48) - '0'(48)) 		=> 	0
+	 * Thats how parsing is done
+	 */
+	//Parsing the month
+	qr_data->month = ((buffer[3] - '0') * 10) + (buffer[4] - '0');
+	//Parsing the year
+	qr_data->year = ((buffer[6] - '0') * 1000) 	+
+					((buffer[7] - '0') * 100 )	+
+					((buffer[8] - '0') * 10  )	+
+					((buffer[9] - '0')   	 );
+	//Parsing hours
+	qr_data->hour = ((buffer[11] - '0') * 10) + (buffer[12] - '0');
+
+	//Parsing minutes
+	qr_data->hour = ((buffer[14] - '0') * 10) + (buffer[15] - '0');
+
+	return 1;
 
 }
 

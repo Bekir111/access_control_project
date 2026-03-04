@@ -48,6 +48,7 @@ typedef struct{
 #define			PERIPH_CLOCK_TEST		16000000
 
 
+extern	uint8_t		uart_rx_buffer[32];
 
 typedef struct{
 	uint8_t 	day;
