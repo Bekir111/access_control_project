@@ -40,7 +40,24 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 }
 
 void UART_recieve_handler(USARTx_typeDef* USARTx){
+	//Check for the flag
+	if(UART_check_RXNE_flag(USARTx)){
 
+		uint8_t ch = UART_data_return(USARTx);
+
+		if(ch == '\r' || ch == '\n'){
+			uart_rx_buffer[uart_index] = '\0';  // Add null terminator
+			uart_string_ready = 1;                 // Set flag
+            uart_index = 0;
+		}
+		else{
+			 uart_rx_buffer[uart_index] = ch;
+			 uart_index++;
+		}
+	}
+	else{
+
+	}
 }
 
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){

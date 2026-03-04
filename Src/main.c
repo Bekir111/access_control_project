@@ -42,8 +42,6 @@ int main(void)
 
 	while(1){
 
-		uint32_t test = UART_data_return(USART2);
-
 		//Setting pin5 as high
 		GPIO_write_pin(GPIOA, GPIO_PIN_5, HIGH);
 		GPIO_write_pin(GPIOA, GPIO_PIN_12, HIGH);
