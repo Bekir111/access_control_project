@@ -18,6 +18,7 @@ typedef struct{
 	uint32_t volatile GTPR;
 }USARTx_typeDef;
 
+
 //Pointers to USART peripherals
 #define			USART2					((USARTx_typeDef*)USART2_ADDR)
 #define			USART3					((USARTx_typeDef*)USART3_ADDR)

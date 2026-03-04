@@ -3,6 +3,11 @@
 #include "rcc_driver.h"
 #include "gpio_driver.h"
 
+			uint8_t		uart_rx_buffer[64];
+volatile	uint8_t		uart_index = 0;
+volatile	uint8_t		uart_string_ready = 0;
+
+
 void UART_enable(USARTx_typeDef* USARTx){
 	//UART enable bit clear
 	USARTx->CR1 &= ~(USART_EN);
@@ -34,15 +39,18 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 	USARTx->BRR = (uint16_t)( (periphClock + (baudRate/2)) / baudRate);
 }
 
+void UART_recieve_handler(USARTx_typeDef* USARTx){
+
+}
+
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
 	return USARTx->SR & (USART_SR_RXNE);
 }
 
 
-uint32_t UART_data_return(USARTx_typeDef* USARTx){
-	while(!(UART_check_RXNE_flag(USARTx)));
+uint8_t UART_data_return(USARTx_typeDef* USARTx){
 
-	return (USARTx->DR && 0xFF);
+	return USARTx->DR;
 
 }
 
