@@ -42,14 +42,15 @@ int main(void)
 
 	while(1){
 
-		//Setting pin5 as high
-		GPIO_write_pin(GPIOA, GPIO_PIN_5, HIGH);
-		GPIO_write_pin(GPIOA, GPIO_PIN_12, HIGH);
+		UART_recieve_handler(USART2);
 
-		//Set low pin5
-		GPIO_write_pin(GPIOA, GPIO_PIN_5, LOW);
-
-
+		if(UART_string_ready()){
+			UART_string_ready_clear();
+			GPIO_write_pin(GPIOA, GPIO_PIN_5,HIGH);
+		}
+		else{
+			GPIO_write_pin(GPIOA, GPIO_PIN_5,LOW);
+		}
 
 	}
 }

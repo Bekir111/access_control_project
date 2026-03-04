@@ -3,9 +3,9 @@
 #include "rcc_driver.h"
 #include "gpio_driver.h"
 
-			uint8_t		uart_rx_buffer[64];
-volatile	uint8_t		uart_index = 0;
-volatile	uint8_t		uart_string_ready = 0;
+					uint8_t		uart_rx_buffer[64];
+		volatile	uint8_t		uart_index = 0;
+extern	volatile	uint8_t		uart_string_ready = 0;
 
 
 void UART_enable(USARTx_typeDef* USARTx){
@@ -55,9 +55,14 @@ void UART_recieve_handler(USARTx_typeDef* USARTx){
 			 uart_index++;
 		}
 	}
-	else{
+}
 
-	}
+uint8_t UART_string_ready(){
+	return uart_string_ready;
+}
+
+void UART_string_ready_clear(){
+	uart_string_ready = 0;
 }
 
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
