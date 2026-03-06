@@ -9,5 +9,7 @@ void RCC_GPIOA_clock_enable(void);
 void RCC_GPIOB_clock_enable(void);
 void RCC_GPIOC_clock_enable(void);
 void RCC_UART2_clock_enable(void);
+void RCC_TIM6_clock_enable(void);
+void RCC_TIM7_clock_enable(void);
 
 #endif /* RCC_DRIVER_H_ */

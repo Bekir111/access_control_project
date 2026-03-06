@@ -48,9 +48,11 @@ typedef struct{
 
 //Macros for enabling GPIO's Clocks
 #define			RCC						((RCC_typeDef*) RCC_BASE_ADDR)
-#define			RCC_AHB1ENR_GPIOA		(1 << 0)
-#define			RCC_AHB1ENR_GPIOB		(1 << 1)
-#define			RCC_AHB1ENR_GPIOC		(1 << 2)
-#define			RCC_APB1ENR_UART2		(1 << 17)
+#define			RCC_AHB1ENR_GPIOA		(0x1UL << 0)
+#define			RCC_AHB1ENR_GPIOB		(0x1UL << 1)
+#define			RCC_AHB1ENR_GPIOC		(0x1UL << 2)
+#define			RCC_APB1ENR_UART2		(0x1UL << 17)
+#define			RCC_APB1ENR_TIM6		(0x1UL << 4)
+#define			RCC_APB1ENR_TIM7		(0x1UL << 4)
 
 #endif /* F446RE_RCC_H_ */

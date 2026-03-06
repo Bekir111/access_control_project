@@ -14,4 +14,10 @@ void RCC_UART2_clock_enable(void){
 	RCC->APB1ENR = RCC_APB1ENR_UART2;
 }
 
+void RCC_TIM6_clock_enable(void){
+	RCC->APB1ENR = RCC_APB1ENR_TIM6;
+}
+void RCC_TIM7_clock_enable(void){
+	RCC->APB1ENR = RCC_APB1ENR_TIM7;
+}
 

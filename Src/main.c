@@ -5,7 +5,6 @@
 #include "uart_driver.h"
 
 static	QR_data_t	qr1_data;
-static	QR_data_t	qr2_data;
 
 
 
