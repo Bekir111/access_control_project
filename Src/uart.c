@@ -2,6 +2,8 @@
 #include"uart_driver.h"
 #include "rcc_driver.h"
 #include "gpio_driver.h"
+#include "arm_nvic.h"
+#include "arm_nvic_driver.h"
 
 				uint8_t		uart_rx_buffer[32];
 volatile		uint8_t		uart_index = 0;
@@ -41,7 +43,6 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 
 void UART_recieve_handler(USARTx_typeDef* USARTx){
 	//Check for the flag
-	if(UART_check_RXNE_flag(USARTx)){
 
 		uint8_t ch = UART_data_return(USARTx);
 
@@ -54,7 +55,7 @@ void UART_recieve_handler(USARTx_typeDef* USARTx){
 			 uart_rx_buffer[uart_index] = ch;
 			 uart_index++;
 		}
-	}
+
 }
 
 uint8_t UART_string_ready(){
@@ -144,5 +145,14 @@ void UART2_init(void){
 
 		UART_set_baud_rate(USART2, BAUDE_RATE_115200, PERIPH_CLOCK_TEST);
 
+		NVIC_EnableIRQ(IRQ_USART2);
+		NVIC_SetPriority(IRQ_USART2, 0);
+
 }
 
+void USART2_IRQHandler(void){
+	if(UART_check_RXNE_flag(USART2)){
+		UART_recieve_handler(USART2);
+	}
+
+}

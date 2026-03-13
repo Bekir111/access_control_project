@@ -22,14 +22,10 @@ int main(void)
 
 	while(1){
 
-		UART_recieve_handler(USART2);
-
 		if(UART_string_ready()){
 			UART_string_ready_clear();
 			if(QR_data_parse(uart_rx_buffer, &qr1_data)){
-
 				GPIO_write_pin(GPIOA, GPIO_PIN_5,HIGH);
-
 			}
 		}
 		else{
