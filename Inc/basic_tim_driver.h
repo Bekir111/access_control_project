@@ -4,6 +4,8 @@
 
 #include "f446re_basic_tim.h"
 
+void CNT_Enable(TIMx_typeDef* tim);
+void CNT_Disable(TIMx_typeDef* tim);
 void TIM6_Init_5sec();
 void TIM7_Init_5sec();
 
