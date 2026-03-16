@@ -7,7 +7,7 @@
 
 void TIM6_Init_5sec();
 void TIM7_Init_5sec();
-
+uint8_t TIMx_UG_FLAG_CHECK(TIMx_typeDef* timer);
 
 
 #endif /* BASIC_TIM_DRIVER_H_ */

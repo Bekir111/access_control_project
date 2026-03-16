@@ -22,4 +22,7 @@ void TIM6_Init_5sec(){
 void TIM7_Init_5sec(){
 	;
 }
+uint8_t TIMx_UG_FLAG_CHECK(TIMx_typeDef* timer){
+	return timer->SR & TIMx_SR_UIF;
+}
 
