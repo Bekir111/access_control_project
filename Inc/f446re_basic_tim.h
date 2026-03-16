@@ -9,16 +9,16 @@
 
 
 typedef struct{
-	uint16_t volatile CR1;
-	uint16_t volatile CR2;
-	uint16_t volatile RESERVED0;
-	uint16_t volatile DIER;
-	uint16_t volatile SR;
-	uint16_t volatile EGR;
-	uint16_t volatile RESERVED1[3];
-	uint16_t volatile CNT;
-	uint16_t volatile PSC;
-	uint16_t volatile ARR;
+	uint32_t volatile CR1;
+	uint32_t volatile CR2;
+	uint32_t volatile RESERVED0;
+	uint32_t volatile DIER;
+	uint32_t volatile SR;
+	uint32_t volatile EGR;
+	uint32_t volatile RESERVED1[3];
+	uint32_t volatile CNT;
+	uint32_t volatile PSC;
+	uint32_t volatile ARR;
 }TIMx_typeDef;
 
 
