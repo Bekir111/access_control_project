@@ -30,7 +30,7 @@ int main(void)
 			UART_string_ready_clear();
 			if(QR_data_parse(uart_rx_buffer, &qr1_data)){
 				GPIO_write_pin(GPIOA, GPIO_PIN_5,HIGH);
-				TIM6_CNT_ENABLE();
+				TIMx_CNT_ENABLE(TIM6);
 			}
 		}
 
