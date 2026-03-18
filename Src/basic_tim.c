@@ -1,30 +1,38 @@
 #include  "basic_tim_driver.h"
 #include "arm_nvic_driver.h"
+#include "gpio_driver.h"
 
 void TIMx_Init_5sec(TIMx_typeDef* timer){
-	//Setting the prescaler
-	timer->PSC = 16000 - 1; // System clock is 16Mhz for the prototyping. It will change for production code
 
-	//Setting the auto reload register
-	timer->ARR = 5000 - 1;
+	    timer->PSC = 16000 - 1;
+	    timer->ARR = 5000 - 1;
 
-	//Clear bits for One-Pusle mode enable
-	timer->CR1 &= ~(TIMx_CR1_OPM);
-	//Set bits
-	timer->CR1 |= TIMx_CR1_OPM;
+	    timer->CR1 |= TIMx_CR1_OPM;
 
-	//Enabling Update interrupt
-	//Clear bit
-	timer->DIER &= ~(TIMx_DIER_UIE);
-	//Set bit
-	timer->DIER &= ~(TIMx_DIER_UIE);
+	    timer->DIER |= TIMx_DIER_UIE;
 
-	//NVIC enable interrupt for timer. For testing we will use only for TIM6
-	NVIC_EnableIRQ(IRQ_TIM6);
-	NVIC_SetPriority(IRQ_TIM6, 1);
+	    timer->CR1 |= TIMx_CR1_URS;
+
+	    timer->EGR = TIMx_EGR_UG;
+	    timer->SR &= ~(TIMx_SR_UIF);
+
+	    NVIC_EnableIRQ(IRQ_TIM6);
+	    NVIC_SetPriority(IRQ_TIM6, 1);
 
 }
+
 uint8_t TIMx_UG_FLAG_CHECK(TIMx_typeDef* timer){
 	return timer->SR & TIMx_SR_UIF;
+}
+
+void TIM6_CNT_ENABLE(){
+	    TIM6->CR1 |= TIMx_CR1_CEN;
+}
+
+void TIM6_DAC_IRQHandler(void){
+	if(TIMx_UG_FLAG_CHECK(TIM6)){
+		TIM6->SR &= ~(TIMx_SR_UIF);
+		GPIO_write_pin(GPIOA, GPIO_PIN_5,LOW);
+	}
 }
 
