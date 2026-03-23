@@ -134,9 +134,6 @@ void UART2_init(void){
 		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
 		//GPIO_pull_up(GPIOA, GPIO_PIN_3);
 
-		//Enable UART2
-		UART_enable(USART2);
-
 		//Enable Receive interrupt
 		UART_RXIE_enable(USART2);
 
@@ -144,6 +141,8 @@ void UART2_init(void){
 		UART_mode(USART2, USART_MODE_RX);
 
 		UART_set_baud_rate(USART2, BAUDE_RATE_115200, PERIPH_CLOCK_TEST);
+
+		UART_enable(USART2);
 
 		NVIC_EnableIRQ(IRQ_USART2);
 		NVIC_SetPriority(IRQ_USART2, 0);
