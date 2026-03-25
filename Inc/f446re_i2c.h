@@ -2,6 +2,8 @@
 #ifndef F446RE_I2C_H_
 #define F446RE_I2C_H_
 
+#include <stdint.h>
+
 #define 		APB1_BASE_ADDR			0x40000000UL
 #define 		I2C1_ADDR				(APB1_BASE_ADDR + 0x5400UL)
 #define 		I2C2_ADDR				(APB1_BASE_ADDR + 0x5800UL)
