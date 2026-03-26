@@ -27,3 +27,7 @@ void RCC_TIM7_clock_enable(void){
 	RCC->APB1ENR |= RCC_APB1ENR_TIM7;
 }
 
+void RCC_I2C1_clock_enable(void){
+	RCC->APB1ENR &= ~(RCC_APB1ENR_I2C1);
+		RCC->APB1ENR |= RCC_APB1ENR_I2C1;
+}
