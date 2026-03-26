@@ -35,10 +35,6 @@ void I2C_init(I2C_typeDef* i2c){
 	i2c->CR1 |= I2C_CR1_SWRST;
 	i2c->CR1 &= ~(I2C_CR1_SWRST);
 
-	//ACK control bit
-	i2c->CR1 &= ~(I2C_CR1_ACK);
-	i2c->CR1 |= I2C_CR1_ACK;
-
 	//Set the FREQ value
 	i2c->CR2 = I2C_CR2_FREQ_TEST;
 	/*
@@ -57,8 +53,12 @@ void I2C_init(I2C_typeDef* i2c){
 	 * Trise(max)/Tpclk1 => for prototyping we use 16MHz so:
 	 * 1000n/62,5n = 16 + 1 => 17 (0x11)
 	 */
+	i2c->TRISE = 17;
 
-	i2c->TRISE |= (0x11 & 0x3F);
-
+	//Peripheral enable
 	i2c->CR1 |= I2C_CR1_PE;
+
+	//ACK control bit
+	i2c->CR1 &= ~(I2C_CR1_ACK);
+	i2c->CR1 |= I2C_CR1_ACK;
 }

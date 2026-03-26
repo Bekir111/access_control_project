@@ -4,6 +4,7 @@
 #include "gpio_driver.h"
 #include "uart_driver.h"
 #include "basic_tim_driver.h"
+#include "i2c_driver.h"
 
 static	QR_data_t	qr1_data;
 
@@ -23,6 +24,9 @@ int main(void)
 	UART2_init();
 	//TIM6 initialization
 	TIMx_Init_5sec(TIM6);
+
+	//I2C1 initialization
+	I2C_init(I2C1);
 
 	while(1){
 
