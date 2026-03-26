@@ -39,3 +39,10 @@ void GPIO_AF_selection_low(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t af_mode){
 		GPIOx->AFRL |= (af_mode << (pin * 4));
 
 }
+
+void GPIO_output_type(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t o_type){
+	//Clear bit
+	GPIOx->OTYPER &= ~(o_type << pin);
+	//Set bit
+	GPIOx->OTYPER |= o_type << pin;
+}
