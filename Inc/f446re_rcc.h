@@ -54,5 +54,6 @@ typedef struct{
 #define			RCC_APB1ENR_UART2		(0x1UL << 17)
 #define			RCC_APB1ENR_TIM6		(0x1UL << 4)
 #define			RCC_APB1ENR_TIM7		(0x1UL << 4)
+#define			RCC_APB1ENR_I2C1		(0x1UL << 21)
 
 #endif /* F446RE_RCC_H_ */
