@@ -22,4 +22,13 @@ void I2C_init(I2C_typeDef* i2c){
 	 * We have to write in CCR register the value 80 decimal 0x50
 	 */
 	i2c->CCR |= (0x50 & 0xFFF);
+
+	//Set TRISE value
+	/*
+	 * the formula from the datasheet for the value in TRIS register is:
+	 * Trise(max)/Tpclk1 => for prototyping we use 16MHz so:
+	 * 1000n/62,5n = 16 + 1 => 17 (0x11)
+	 */
+
+	i2c->TRISE |= (0x11 & 0x3F);
 }
