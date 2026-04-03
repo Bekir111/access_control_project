@@ -1,6 +1,7 @@
 #include "i2c_driver.h"
 #include "gpio_driver.h"
 #include "rcc_driver.h"
+#include "arm_nvic_driver.h"
 
 #include <stdint.h>
 
@@ -55,10 +56,23 @@ void I2C_init(I2C_typeDef* i2c){
 	 */
 	i2c->TRISE = 17;
 
+	//Enable interrupts
+	i2c->CR2 &= ~(I2C_CR2_ITBUFEN);
+	i2c->CR2 |= (I2C_CR2_ITBUFEN);
+	i2c->CR2 &= ~(I2C_CR2_ITERREN);
+	i2c->CR2 |= (I2C_CR2_ITERREN);
+	i2c->CR2 &= ~(I2C_CR2_ITEVTEN);
+	i2c->CR2 |= (I2C_CR2_ITEVTEN);
+
 	//Peripheral enable
 	i2c->CR1 |= I2C_CR1_PE;
 
 	//ACK control bit
 	i2c->CR1 &= ~(I2C_CR1_ACK);
 	i2c->CR1 |= I2C_CR1_ACK;
+
+	NVIC_EnableIRQ(IRQ_I2C1_EV);
+	NVIC_EnableIRQ(IRQ_I2C1_ER);
+	NVIC_SetPriority(IRQ_I2C1_EV, 1);
+	NVIC_SetPriority(IRQ_I2C1_ER, 1);
 }
