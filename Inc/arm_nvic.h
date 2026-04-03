@@ -18,5 +18,7 @@
 #define			IRQ_UART5				53
 #define			IRQ_TIM6				54
 #define			IRQ_TIM7				55
+#define			IRQ_I2C1_EV				31
+#define			IRQ_I2C1_ER				32
 
 #endif /* ARM_NVIC_H_ */
