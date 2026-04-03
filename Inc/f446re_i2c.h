@@ -26,6 +26,16 @@ typedef struct{
 
 #define			I2C1 					((I2C_typeDef *) I2C1_ADDR)
 
+//Macros for I2C state's
+#define 		I2C_IDLE				0
+#define 		I2C_IDLE				0
+#define 		I2C_IDLE				0
+#define 		I2C_IDLE				0
+#define 		I2C_IDLE				0
+#define 		I2C_IDLE				0
+#define 		I2C_IDLE				0
+
+
 
 //Macros for CR1
 #define			I2C_CR1_PE				(0x1 << 0)
