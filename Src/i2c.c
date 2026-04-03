@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 
+
 void I2C_init(I2C_typeDef* i2c){
 
 	//Enabling the clock for B peripheral
@@ -73,6 +74,14 @@ void I2C_init(I2C_typeDef* i2c){
 
 	NVIC_EnableIRQ(IRQ_I2C1_EV);
 	NVIC_EnableIRQ(IRQ_I2C1_ER);
-	NVIC_SetPriority(IRQ_I2C1_EV, 1);
-	NVIC_SetPriority(IRQ_I2C1_ER, 1);
+	NVIC_SetPriority(IRQ_I2C1_EV, 2);
+	NVIC_SetPriority(IRQ_I2C1_ER, 2);
+}
+
+void I2C1_EV_IRQHandler(void){
+	;
+}
+
+void I2C1_ER_IRQHandler(void){
+	;
 }
