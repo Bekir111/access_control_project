@@ -2,8 +2,66 @@
 #include "gpio_driver.h"
 #include "rcc_driver.h"
 #include "arm_nvic_driver.h"
+#include "ds3231.h"
+
+volatile uint8_t rtc_buffer[7];
 
 #include <stdint.h>
+
+void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
+	volatile uint8_t i;
+	//1. Set the START bit and ACK bit
+	i2c->CR1 |= I2C_CR1_ACK;
+	i2c->CR1 |= I2C_CR1_START;
+	//Now have to wait for SB bit to be set as 1 (Start condition generated)
+	while(!(i2c->SR1 & I2C_SR1_SB));
+
+	//2. Have to read SR1 followed by writing the address of the slave in DR register
+	(void)i2c->SR1;
+	//This is write mode to set the internal pointer of the module to the 00
+	i2c->DR = (DS3231_ADDR << 1);
+
+	//Waiting for ADDR flag to be set as 1
+	while(!(i2c->SR1 & I2C_SR1_ADDR));
+
+	//Clearing the SR1 register by reading SR1 followed by reading the SR2 register also
+	(void)i2c->SR1;
+	(void)i2c->SR2;
+
+	//4. Writing the address where we want to set the internal pointer of the module
+	i2c->DR = 0x00;
+	//Waiting for the byte to be successfully sent by checking for BTF flag
+	while(!(i2c->SR1 & I2C_SR1_BTF));
+	//Reading the SR1 and SR2 to clear the flag
+	(void)i2c->SR1;
+	(void)i2c->SR2;
+
+	//5. Generating a repeated start to now read the data sequence
+	i2c->CR1 |= I2C_CR1_START;
+	//Writing the slave address with last bit to be 1 for reading
+	i2c->DR = ((DS3231_ADDR << 1) | 0x01);
+	//Waiting for ADDR flag to be set as 1
+	while(!(i2c->SR1 & I2C_SR1_ADDR));
+	//Clearing the ADDR bit by reading SR1 and SR2
+	(void)i2c->SR1;
+	(void)i2c->SR2;
+	//6. Reading the sequence of data by the length that is passed by the function
+	for(i = 0; i < len;i++){
+		//Checking if the byte is received
+		while(!(i2c->SR1 & I2C_SR1_RxNE));
+		if(i <= len - 1){
+			//Reading until reaching the last byte of sequence
+			buffer[i] = i2c->DR;
+		}
+		else{
+			//When we receive the last byte of data we want to set NACK and generate Stop condition
+			i2c->CR1 &= ~(I2C_CR1_ACK);
+			i2c->CR1 |= I2C_CR1_STOP;
+			buffer[i] = i2c->DR;
+		}
+	}
+
+}
 
 
 void I2C_init(I2C_typeDef* i2c){
@@ -39,6 +97,9 @@ void I2C_init(I2C_typeDef* i2c){
 
 	//Set the FREQ value
 	i2c->CR2 = I2C_CR2_FREQ_TEST;
+
+	//Using I2C in Standart Mode
+	i2c->CCR |= I2C_CCR_SM;
 	/*
 	 * Now for the calculation of the CCR register for Sm, with 100KHz SCL clock frequency:
 	 * Peripheral clock for testing is 16MHz, but for production will calculate for 45MHz
@@ -48,7 +109,6 @@ void I2C_init(I2C_typeDef* i2c){
 	 * We have to write in CCR register the value 80 decimal 0x50
 	 */
 	i2c->CCR |= (0x50 & 0xFFF);
-
 	//Set TRISE value
 	/*
 	 * the formula from the datasheet for the value in TRIS register is:
@@ -57,25 +117,25 @@ void I2C_init(I2C_typeDef* i2c){
 	 */
 	i2c->TRISE = 17;
 
-	//Enable interrupts
+	/*
+	 * This section is commented because first i will make the I2C work with polling. After testing
+	 * and confirming that the data transfers are successful, then
+	 */
+	/*Enable interrupts
 	i2c->CR2 &= ~(I2C_CR2_ITBUFEN);
 	i2c->CR2 |= (I2C_CR2_ITBUFEN);
 	i2c->CR2 &= ~(I2C_CR2_ITERREN);
 	i2c->CR2 |= (I2C_CR2_ITERREN);
 	i2c->CR2 &= ~(I2C_CR2_ITEVTEN);
-	i2c->CR2 |= (I2C_CR2_ITEVTEN);
+	i2c->CR2 |= (I2C_CR2_ITEVTEN);*/
 
 	//Peripheral enable
 	i2c->CR1 |= I2C_CR1_PE;
 
-	//ACK control bit
-	i2c->CR1 &= ~(I2C_CR1_ACK);
-	i2c->CR1 |= I2C_CR1_ACK;
-
-	NVIC_EnableIRQ(IRQ_I2C1_EV);
+	/*NVIC_EnableIRQ(IRQ_I2C1_EV);
 	NVIC_EnableIRQ(IRQ_I2C1_ER);
 	NVIC_SetPriority(IRQ_I2C1_EV, 2);
-	NVIC_SetPriority(IRQ_I2C1_ER, 2);
+	NVIC_SetPriority(IRQ_I2C1_ER, 2);*/
 }
 
 void I2C1_EV_IRQHandler(void){

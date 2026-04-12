@@ -28,7 +28,7 @@ typedef struct{
 
 //Macros for I2C state's
 #define 		I2C_IDLE				0
-#define 		I2C_IDLE				0
+#define 		I2C_START				0
 #define 		I2C_IDLE				0
 #define 		I2C_IDLE				0
 #define 		I2C_IDLE				0

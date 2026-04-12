@@ -5,7 +5,7 @@
 #include "arm_nvic.h"
 #include "arm_nvic_driver.h"
 
-				uint8_t		uart_rx_buffer[32];
+                uint8_t		uart_rx_buffer[32];
 volatile		uint8_t		uart_index = 0;
 volatile		uint8_t		uart_string_ready = 0;
 
