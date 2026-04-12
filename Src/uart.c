@@ -111,7 +111,7 @@ uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 	qr_data->hour = ((buffer[11] - '0') * 10) + (buffer[12] - '0');
 
 	//Parsing minutes
-	qr_data->hour = ((buffer[14] - '0') * 10) + (buffer[15] - '0');
+	qr_data->minute = ((buffer[14] - '0') * 10) + (buffer[15] - '0');
 
 	return 1;
 
