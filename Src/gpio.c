@@ -40,6 +40,14 @@ void GPIO_AF_selection_low(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t af_mode){
 
 }
 
+void GPIO_AF_selection_high(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t af_mode){
+		//Clear bits
+		GPIOx->AFRH &= ~(af_mode << ((pin - 8) * 4));
+		//Set bits
+		GPIOx->AFRH |= (af_mode << ((pin - 8) * 4));
+
+}
+
 void GPIO_output_type(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t o_type){
 	//Clear bit
 	GPIOx->OTYPER &= ~(o_type << pin);
