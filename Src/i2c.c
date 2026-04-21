@@ -143,23 +143,23 @@ void I2C_init(I2C_typeDef* i2c){
 	RCC_I2C1_clock_enable();
 
 	//Setting GPIO's for Alternate function mode
-	GPIO_pin_mode(GPIOB, GPIO_PIN_6, AF_MODE);
-	GPIO_pin_mode(GPIOB, GPIO_PIN_7, AF_MODE);
+	GPIO_pin_mode(GPIOB, GPIO_PIN_8, AF_MODE);
+	GPIO_pin_mode(GPIOB, GPIO_PIN_9, AF_MODE);
 
 	//Setting the output type for open-drain
-	GPIO_output_type(GPIOB, GPIO_PIN_6, OTYPE_OD);
-	GPIO_output_type(GPIOB, GPIO_PIN_7, OTYPE_OD);
+	GPIO_output_type(GPIOB, GPIO_PIN_8, OTYPE_OD);
+	GPIO_output_type(GPIOB, GPIO_PIN_9, OTYPE_OD);
 
 	//Setting the pull up resistor by software. Will be added physical pull up on the PCB to ensure that
 	//SCL and SDA lines will be pulled high and pulled low only via hardware that uses I2C lines
-	GPIO_pull_up(GPIOB, GPIO_PIN_6);
-	GPIO_pull_up(GPIOB, GPIO_PIN_7);
+	GPIO_pull_up(GPIOB, GPIO_PIN_8);
+	GPIO_pull_up(GPIOB, GPIO_PIN_9);
 
 	//Selecting AF4 for the GPIO's
 	//I2C1_SCL
-	GPIO_AF_selection_low(GPIOB, GPIO_PIN_6, AF4);
+	GPIO_AF_selection_high(GPIOB, GPIO_PIN_8, AF4);
 	//I2C1_SDA
-	GPIO_AF_selection_low(GPIOB, GPIO_PIN_7, AF4);
+	GPIO_AF_selection_high(GPIOB, GPIO_PIN_9, AF4);
 
 
 	//Reset the I2C
