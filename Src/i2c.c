@@ -9,9 +9,12 @@ volatile uint8_t rtc_buffer[7];
 #include <stdint.h>
 
 void I2C_write(I2C_typeDef* i2c,
-			   const uint8_t year, const uint8_t day,
-			   const uint8_t month, const uint8_t hours,
-			   const uint8_t minutes){
+			   const uint8_t year,
+			   const uint8_t month,
+			   const uint8_t day,
+			   const uint8_t hours,
+			   const uint8_t minutes)
+{
 	volatile uint8_t i;
 	//1. Set the START bit and ACK bit
 	i2c->CR1 |= I2C_CR1_ACK;
@@ -21,7 +24,6 @@ void I2C_write(I2C_typeDef* i2c,
 
 	//2. Have to read SR1 followed by writing the address of the slave in DR register
 	(void)i2c->SR1;
-	//This is write mode to set the internal pointer of the module to the 00
 	i2c->DR = (DS3231_ADDR << 1);
 
 	//Waiting for ADDR flag to be set as 1
@@ -30,52 +32,40 @@ void I2C_write(I2C_typeDef* i2c,
 	//Clearing the SR1 register by reading SR1 followed by reading the SR2 register also
 	(void)i2c->SR1;
 	(void)i2c->SR2;
-
+	//Checking transfer enable flag
+	while(!(i2c->SR1 & I2C_SR1_TxE));
 	//4. Writing the address where we want to set the internal pointer of the module
-	i2c->DR = 0x00;
-	//Waiting for the byte to be successfully sent by checking for BTF flag
-	while(!(i2c->SR1 & I2C_SR1_BTF));
-	//Reading the SR1 and SR2 to clear the flag
-	(void)i2c->SR1;
-	(void)i2c->SR2;
+	i2c->DR = 0x01;
 
-	//5. Generating a repeated start to now read the data sequence
-	i2c->CR1 |= I2C_CR1_START;
-	//Writing the slave address with last bit to be 0 for writing
-	i2c->DR = ((DS3231_ADDR << 1) | 0x00);
-
-	//Waiting for ADDR flag to be set as 1
-	while(!(i2c->SR1 & I2C_SR1_ADDR));
-	//Clearing the ADDR bit by reading SR1 and SR2
-	(void)i2c->SR1;
-	(void)i2c->SR2;
 	//6. Writing the sequence of data by the length that is passed by the function
-	for(i = 0; i < 7;i++){
+	for(i = 0; i < 6;i++){
 		//Checking if the byte is received
 		while(!(i2c->SR1 & I2C_SR1_TxE));
 		switch(i){
+			case 0:
+				i2c->DR = (minutes);
+			break;
 			case 1:
-				i2c->DR = minutes;
+				i2c->DR = DEC_TO_BCD(hours);
 			break;
 			case 2:
-				i2c->DR = hours;
-			break;
-			case 3:
 				i2c->DR = 0x00;
 			break;
+			case 3:
+				i2c->DR = DEC_TO_BCD(day);
+			break;
 			case 4:
-				i2c->DR = day;
+				i2c->DR = DEC_TO_BCD(month);
 			break;
 			case 5:
-				i2c->DR = month;
-			break;
-			case 6:
-				i2c->DR = year;
+				i2c->DR = DEC_TO_BCD(year - 2000);
 			break;
 
 		}
 	}
 
+	while(!((i2c->SR1 & I2C_SR1_TxE) && (i2c->SR1 & I2C_SR1_BTF)));
+	i2c->CR1 |= I2C_CR1_STOP;
 
 }
 
@@ -120,7 +110,7 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 	for(i = 0; i < len;i++){
 		//Checking if the byte is received
 		while(!(i2c->SR1 & I2C_SR1_RxNE));
-		if(i <= len - 1){
+		if(i < len - 1){
 			//Reading until reaching the last byte of sequence
 			buffer[i] = i2c->DR;
 		}
