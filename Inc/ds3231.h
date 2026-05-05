@@ -14,5 +14,6 @@ typedef struct{
 }DS3231_data_t;
 
 #define BCD_TO_DEC(x)  (x - 6 * (x >> 4))
+#define DEC_TO_BCD(x)  ((x / 10) << 4) | (x % 10);
 
 #endif /* DS3231_H_ */
