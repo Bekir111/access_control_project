@@ -15,6 +15,7 @@ void I2C_write(I2C_typeDef* i2c,
 			   const uint8_t hours,
 			   const uint8_t minutes)
 {
+
 	volatile uint8_t i;
 	//1. Set the START bit and ACK bit
 	i2c->CR1 |= I2C_CR1_ACK;
@@ -23,18 +24,19 @@ void I2C_write(I2C_typeDef* i2c,
 	while(!(i2c->SR1 & I2C_SR1_SB));
 
 	//2. Have to read SR1 followed by writing the address of the slave in DR register
+	(void)i2c->SR2;
 	(void)i2c->SR1;
 	i2c->DR = (DS3231_ADDR << 1);
 
 	//Waiting for ADDR flag to be set as 1
 	while(!(i2c->SR1 & I2C_SR1_ADDR));
-
 	//Clearing the SR1 register by reading SR1 followed by reading the SR2 register also
 	(void)i2c->SR1;
 	(void)i2c->SR2;
 	//Checking transfer enable flag
 	while(!(i2c->SR1 & I2C_SR1_TxE));
 	//4. Writing the address where we want to set the internal pointer of the module
+	//In this case we want to skip the seconds address where it is 0x00
 	i2c->DR = 0x01;
 
 	//6. Writing the sequence of data by the length that is passed by the function
@@ -43,7 +45,7 @@ void I2C_write(I2C_typeDef* i2c,
 		while(!(i2c->SR1 & I2C_SR1_TxE));
 		switch(i){
 			case 0:
-				i2c->DR = (minutes);
+				i2c->DR = DEC_TO_BCD(minutes);
 			break;
 			case 1:
 				i2c->DR = DEC_TO_BCD(hours);
@@ -58,7 +60,7 @@ void I2C_write(I2C_typeDef* i2c,
 				i2c->DR = DEC_TO_BCD(month);
 			break;
 			case 5:
-				i2c->DR = DEC_TO_BCD(year - 2000);
+				i2c->DR = DEC_TO_BCD(year);
 			break;
 
 		}
@@ -79,8 +81,8 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 
 	//2. Have to read SR1 followed by writing the address of the slave in DR register
 	(void)i2c->SR1;
-	//This is write mode to set the internal pointer of the module to the 00
-	i2c->DR = (DS3231_ADDR << 1);
+	//This is read mode
+	i2c->DR = DS3231_ADDR << 1;
 
 	//Waiting for ADDR flag to be set as 1
 	while(!(i2c->SR1 & I2C_SR1_ADDR));
@@ -90,7 +92,7 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 	(void)i2c->SR2;
 
 	//4. Writing the address where we want to set the internal pointer of the module
-	i2c->DR = 0x00;
+	i2c->DR = 0x01;
 	//Waiting for the byte to be successfully sent by checking for BTF flag
 	while(!(i2c->SR1 & I2C_SR1_BTF));
 	//Reading the SR1 and SR2 to clear the flag
@@ -99,6 +101,7 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 
 	//5. Generating a repeated start to now read the data sequence
 	i2c->CR1 |= I2C_CR1_START;
+	while(!(i2c->SR1 & I2C_SR1_SB));
 	//Writing the slave address with last bit to be 1 for reading
 	i2c->DR = ((DS3231_ADDR << 1) | 0x01);
 	//Waiting for ADDR flag to be set as 1
@@ -107,10 +110,10 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 	(void)i2c->SR1;
 	(void)i2c->SR2;
 	//6. Reading the sequence of data by the length that is passed by the function
-	for(i = 0; i < len;i++){
+	for(i = 0; i < len - 1;i++){
 		//Checking if the byte is received
 		while(!(i2c->SR1 & I2C_SR1_RxNE));
-		if(i < len - 1){
+		if(i < len - 2){
 			//Reading until reaching the last byte of sequence
 			buffer[i] = i2c->DR;
 		}
@@ -121,6 +124,9 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 			buffer[i] = i2c->DR;
 		}
 	}
+
+	while(!(i2c->SR1 & I2C_SR1_RxNE));
+	buffer[len - 1] = i2c->DR;
 
 }
 

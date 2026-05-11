@@ -28,6 +28,9 @@ int main(void)
 	//I2C1 initialization
 	I2C_init(I2C1);
 
+	//Testing write method for I2C
+	I2C_write(I2C1, 26, 5, 7, 14, 1);
+
 	while(1){
 
 		I2C_multiple_read(I2C1,7,rtc_buffer);
