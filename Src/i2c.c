@@ -119,6 +119,7 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 }
 
 
+
 void I2C_init(I2C_typeDef* i2c){
 
 	//Enabling the clock for B peripheral
