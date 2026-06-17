@@ -7,6 +7,8 @@
 #define 		APB1_BASE_ADDR			0x40000000UL
 #define 		USART2_ADDR				(APB1_BASE_ADDR + 0x4400UL)
 #define 		USART3_ADDR				(APB1_BASE_ADDR + 0x4800UL)
+#define			UART4_ADDR				(APB1_BASE_ADDR + 0x4C00UL)
+#define			UART5_ADDR				(APB1_BASE_ADDR + 0x5000UL)
 
 typedef struct{
 	uint32_t volatile SR;
@@ -22,6 +24,8 @@ typedef struct{
 //Pointers to USART peripherals
 #define			USART2					((USARTx_typeDef*)USART2_ADDR)
 #define			USART3					((USARTx_typeDef*)USART3_ADDR)
+#define			UART4					((USARTx_typeDef*)UART4_ADDR)
+#define			UART5					((USARTx_typeDef*)UART5_ADDR)
 
 
 //UART Enable macro
