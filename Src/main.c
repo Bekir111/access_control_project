@@ -14,6 +14,9 @@ int main(void)
 {
 	//Enable clock for GPIOA
 	RCC_GPIOA_clock_enable();
+	RCC_GPIOC_clock_enable();
+	RCC_GPIOB_clock_enable();
+
 	RCC_TIM6_clock_enable();
 
 	//Set pin 5 at GPIOA MODER register as output
@@ -22,6 +25,10 @@ int main(void)
 
 	//USART2 initialization
 	UART2_init();
+	//UART4 and UART5 initialization
+	UART5_init();
+	UART4_init();
+
 	//TIM6 initialization
 	TIMx_Init_5sec(TIM6);
 

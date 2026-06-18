@@ -118,6 +118,10 @@ uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 }
 
 void UART4_init(void){
+
+		//Enabling clock for peripheral C
+		RCC_GPIOC_clock_enable();
+
 		//UART2 clock enable
 		RCC_UART4_clock_enable();
 
@@ -149,6 +153,9 @@ void UART4_init(void){
 }
 
 void UART5_init(void){
+
+		//Enabling clock for peripheral D
+		RCC_GPIOD_clock_enable();
 		//UART2 clock enable
 		RCC_UART5_clock_enable();
 
