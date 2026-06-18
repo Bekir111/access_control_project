@@ -8,6 +8,7 @@
 void RCC_GPIOA_clock_enable(void);
 void RCC_GPIOB_clock_enable(void);
 void RCC_GPIOC_clock_enable(void);
+void RCC_GPIOD_clock_enable(void);
 void RCC_UART2_clock_enable(void);
 void RCC_UART4_clock_enable(void);
 void RCC_UART5_clock_enable(void);
