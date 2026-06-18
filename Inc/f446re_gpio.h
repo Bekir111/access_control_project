@@ -9,6 +9,7 @@
 #define		GPIOA_PERIPH			(AHB1_PERIPH_BASE)
 #define		GPIOB_PERIPH			(AHB1_PERIPH_BASE + 0x0400UL)
 #define		GPIOC_PERIPH			(AHB1_PERIPH_BASE + 0x0800UL)
+#define		GPIOD_PERIPH			(AHB1_PERIPH_BASE + 0x0C00UL)
 
 
 //GPIO's register
@@ -30,6 +31,7 @@ typedef struct{
 #define		GPIOA				((GPIOx_typeDef*) GPIOA_PERIPH)
 #define		GPIOB				((GPIOx_typeDef*) GPIOB_PERIPH)
 #define		GPIOC				((GPIOx_typeDef*) GPIOC_PERIPH)
+#define		GPIOD				((GPIOx_typeDef*) GPIOD_PERIPH)
 
 //Pin numbers
 #define 	GPIO_PIN_1			1
