@@ -18,6 +18,16 @@ void RCC_UART2_clock_enable(void){
 	RCC->APB1ENR |= RCC_APB1ENR_UART2;
 }
 
+void RCC_UART4_clock_enable(void){
+	RCC->APB1ENR &= ~(RCC_APB1ENR_UART4);
+	RCC->APB1ENR |= RCC_APB1ENR_UART4;
+}
+
+void RCC_UART5_clock_enable(void){
+	RCC->APB1ENR &= ~(RCC_APB1ENR_UART5);
+	RCC->APB1ENR |= RCC_APB1ENR_UART5;
+}
+
 void RCC_TIM6_clock_enable(void){
 	RCC->APB1ENR &= ~(RCC_APB1ENR_TIM6);
 	RCC->APB1ENR |= RCC_APB1ENR_TIM6;
