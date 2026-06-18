@@ -51,3 +51,10 @@ void TIM6_DAC_IRQHandler(void){
 	}
 }
 
+void TIM7_IRQHandler(void){
+	if(TIMx_UG_FLAG_CHECK(TIM7)){
+			TIM6->SR &= ~(TIMx_SR_UIF);
+			GPIO_write_pin(GPIOA, GPIO_PIN_5,LOW);
+	}
+}
+
