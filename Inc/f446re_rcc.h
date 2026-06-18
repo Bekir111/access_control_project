@@ -52,6 +52,8 @@ typedef struct{
 #define			RCC_AHB1ENR_GPIOB		(0x1UL << 1)
 #define			RCC_AHB1ENR_GPIOC		(0x1UL << 2)
 #define			RCC_APB1ENR_UART2		(0x1UL << 17)
+#define			RCC_APB1ENR_UART4		(0x1UL << 19)
+#define			RCC_APB1ENR_UART5		(0x1UL << 20)
 #define			RCC_APB1ENR_TIM6		(0x1UL << 4)
 #define			RCC_APB1ENR_TIM7		(0x1UL << 4)
 #define			RCC_APB1ENR_I2C1		(0x1UL << 21)
