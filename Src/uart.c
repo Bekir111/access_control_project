@@ -117,6 +117,68 @@ uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 
 }
 
+void UART4_init(void){
+		//UART2 clock enable
+		RCC_UART4_clock_enable();
+
+		//Set PA2 as AF mode
+		GPIO_pin_mode(GPIOC, GPIO_PIN_10, AF_MODE);
+			//Set PA3 as AF mode
+		GPIO_pin_mode(GPIOC, GPIO_PIN_11, AF_MODE);
+
+		//AF selection for PA2
+		GPIO_AF_selection_low(GPIOD, GPIO_PIN_10, AF8);
+
+		//AF selection for PA3
+		GPIO_AF_selection_low(GPIOC, GPIO_PIN_11, AF8);
+		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
+		//GPIO_pull_up(GPIOA, GPIO_PIN_3);
+
+		//Enable Receive interrupt
+		UART_RXIE_enable(UART4);
+
+		//Set UART to Receive mode only
+		UART_mode(UART4, USART_MODE_RX);
+
+		UART_set_baud_rate(UART4, BAUDE_RATE_115200, PERIPH_CLOCK_TEST);
+
+		UART_enable(UART4);
+
+		NVIC_EnableIRQ(IRQ_UART4);
+		NVIC_SetPriority(IRQ_UART4, 0);
+}
+
+void UART5_init(void){
+		//UART2 clock enable
+		RCC_UART5_clock_enable();
+
+		//Set PA2 as AF mode
+		GPIO_pin_mode(GPIOD, GPIO_PIN_2, AF_MODE);
+			//Set PA3 as AF mode
+		GPIO_pin_mode(GPIOC, GPIO_PIN_12, AF_MODE);
+
+		//AF selection for PA2
+		GPIO_AF_selection_low(GPIOD, GPIO_PIN_2, AF8);
+
+		//AF selection for PA3
+		GPIO_AF_selection_low(GPIOC, GPIO_PIN_12, AF8);
+		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
+		//GPIO_pull_up(GPIOA, GPIO_PIN_3);
+
+		//Enable Receive interrupt
+		UART_RXIE_enable(UART5);
+
+		//Set UART to Receive mode only
+		UART_mode(UART5, USART_MODE_RX);
+
+		UART_set_baud_rate(UART5, BAUDE_RATE_115200, PERIPH_CLOCK_TEST);
+
+		UART_enable(UART5);
+
+		NVIC_EnableIRQ(IRQ_UART5);
+		NVIC_SetPriority(IRQ_UART5, 0);
+}
+
 void UART2_init(void){
 		//UART2 clock enable
 		RCC_UART2_clock_enable();
@@ -147,6 +209,12 @@ void UART2_init(void){
 		NVIC_EnableIRQ(IRQ_USART2);
 		NVIC_SetPriority(IRQ_USART2, 0);
 
+}
+
+void UART5_IRQHandler(){
+	if(UART_check_RXNE_flag(UART5)){
+			UART_recieve_handler(UART5);
+	}
 }
 
 void USART2_IRQHandler(void){
