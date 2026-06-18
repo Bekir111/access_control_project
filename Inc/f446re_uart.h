@@ -3,6 +3,8 @@
 #define F446RE_UART_H_
 
 #include <stdint.h>
+#include "f446re_basic_tim.h"
+#include "f446re_gpio.h"
 
 #define 		APB1_BASE_ADDR			0x40000000UL
 #define 		USART2_ADDR				(APB1_BASE_ADDR + 0x4400UL)
