@@ -16,5 +16,6 @@ typedef struct{
 
 }DoorContext_t;
 
+extern DoorContext_t doorA, doorB;
 
 #endif /* DOOR_CONTEXT_H_ */

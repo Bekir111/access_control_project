@@ -4,6 +4,7 @@
 #include "gpio_driver.h"
 #include "arm_nvic.h"
 #include "arm_nvic_driver.h"
+#include "door_context.h"
 
                 uint8_t		uart_rx_buffer[32];
 volatile		uint8_t		uart_index = 0;

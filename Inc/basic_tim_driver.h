@@ -5,7 +5,7 @@
 #include "f446re_basic_tim.h"
 
 
-void TIMx_Init_5sec(TIMx_typeDef* timer);
+void TIM_Init_5sec();
 uint8_t TIMx_UG_FLAG_CHECK(TIMx_typeDef* timer);
 void TIMx_CNT_ENABLE(TIMx_typeDef* timer);
 

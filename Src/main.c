@@ -5,23 +5,31 @@
 #include "uart_driver.h"
 #include "basic_tim_driver.h"
 #include "i2c_driver.h"
+#include "door_context.h"
 
 static	QR_data_t	qr1_data;
 
+DoorContext_t doorA = {
+		.uart = UART4,
+		.tim = TIM6,
+		.string_ready = 0,
+		.gpio_periph = GPIOC,
+		.gpio_pin = GPIO_PIN_6
+	};
 
+DoorContext_t doorB = {
+		.uart = UART5,
+		.tim = TIM7,
+		.string_ready = 0,
+		.gpio_periph = GPIOC,
+		.gpio_pin = GPIO_PIN_7
+	};
 
 int main(void)
 {
-	//Enable clock for GPIOA
-	RCC_GPIOA_clock_enable();
-	RCC_GPIOC_clock_enable();
-	RCC_GPIOB_clock_enable();
 
-	RCC_TIM6_clock_enable();
-
-	//Set pin 5 at GPIOA MODER register as output
-	GPIO_pin_mode(GPIOA, GPIO_PIN_5, GPOM_MODE);
-	GPIO_pin_mode(GPIOA, GPIO_PIN_12, GPOM_MODE);
+	//GPIO's initialization
+	GPIOs_init();
 
 	//USART2 initialization
 	UART2_init();
@@ -29,8 +37,8 @@ int main(void)
 	UART5_init();
 	UART4_init();
 
-	//TIM6 initialization
-	TIMx_Init_5sec(TIM6);
+	//TIM initialization
+	TIM_Init_5sec();
 
 	//I2C1 initialization
 	I2C_init(I2C1);

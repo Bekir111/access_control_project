@@ -1,4 +1,5 @@
 #include "gpio_driver.h"
+#include "rcc_driver.h"
 
 void GPIO_pin_mode(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t mode){
 	//Clear bits
@@ -54,3 +55,22 @@ void GPIO_output_type(GPIOx_typeDef* GPIOx, uint8_t pin, uint8_t o_type){
 	//Set bit
 	GPIOx->OTYPER |= o_type << pin;
 }
+
+void GPIOs_init(){
+	//Enabling clock for GPIO's
+	RCC_GPIOA_clock_enable();
+	RCC_GPIOC_clock_enable();
+	RCC_GPIOB_clock_enable();
+
+	//For testing purposes i will set output mode for the LED on the NUCLEO
+	GPIO_pin_mode(GPIOA, GPIO_PIN_5, GPOM_MODE);
+
+	//Set GPIO's as output
+	GPIO_pin_mode(GPIOC, GPIO_PIN_6, GPOM_MODE);
+	GPIO_pin_mode(GPIOC, GPIO_PIN_7, GPOM_MODE);
+	GPIO_pin_mode(GPIOC, GPIO_PIN_8, GPOM_MODE);
+	GPIO_pin_mode(GPIOC, GPIO_PIN_9, GPOM_MODE);
+}
+
+
+
