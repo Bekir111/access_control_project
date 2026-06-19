@@ -8,6 +8,7 @@
 typedef struct{
 
 	uint8_t rx_buffer[32];
+	uint8_t rx_index;
 	uint8_t string_ready;
 	USARTx_typeDef *uart;
 	TIMx_typeDef *tim;

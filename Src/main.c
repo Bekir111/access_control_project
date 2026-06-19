@@ -27,7 +27,6 @@ DoorContext_t doorB = {
 
 int main(void)
 {
-
 	//GPIO's initialization
 	GPIOs_init();
 
