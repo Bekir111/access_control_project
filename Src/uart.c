@@ -131,7 +131,7 @@ void UART4_init(void){
 		GPIO_pin_mode(GPIOC, GPIO_PIN_11, AF_MODE);
 
 		//AF selection for PA2
-		GPIO_AF_selection_low(GPIOD, GPIO_PIN_10, AF8);
+		GPIO_AF_selection_low(GPIOC, GPIO_PIN_10, AF8);
 
 		//AF selection for PA3
 		GPIO_AF_selection_low(GPIOC, GPIO_PIN_11, AF8);
@@ -220,7 +220,12 @@ void UART2_init(void){
 
 void UART5_IRQHandler(){
 	if(UART_check_RXNE_flag(UART5)){
-			UART_recieve_handler(UART5);
+		UART_recieve_handler(UART5);
+	}
+}
+void UART4_IRQHandler(){
+	if(UART_check_RXNE_flag(UART5)){
+		UART_recieve_handler(UART5);
 	}
 }
 

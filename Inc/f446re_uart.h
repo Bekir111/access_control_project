@@ -66,15 +66,5 @@ typedef struct{
 
 }QR_data_t;
 
-typedef struct{
-
-	uint8_t rx_buffer[32];
-	uint8_t string_ready;
-	USARTx_typeDef *uart;
-	TIMx_typeDef *tim;
-	GPIOx_typeDef *gpio_periph;
-	uint8_t gpio_pin;
-
-}DoorContext_t;
 
 #endif /* F446RE_UART_H_ */

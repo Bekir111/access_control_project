@@ -13,6 +13,8 @@ typedef struct{
 	uint8_t		minute;
 }DS3231_data_t;
 
+
+
 #define BCD_TO_DEC(x)  (x - 6 * (x >> 4))
 #define DEC_TO_BCD(x)  (((x / 10) << 4) | (x % 10))
 
