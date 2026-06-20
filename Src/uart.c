@@ -6,8 +6,7 @@
 #include "arm_nvic_driver.h"
 #include "door_context.h"
 
-                uint8_t		uart_rx_buffer[32];
-volatile		uint8_t		uart_string_ready = 0;
+
 
 
 void UART_enable(USARTx_typeDef* USARTx){
@@ -42,7 +41,6 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 }
 
 void UART_recieve_handler(DoorContext_t* door){
-	//Check for the flag
 
 		uint8_t ch = UART_data_return(door->uart);
 
@@ -58,14 +56,6 @@ void UART_recieve_handler(DoorContext_t* door){
 
 }
 
-uint8_t UART_string_ready(){
-	return uart_string_ready;
-}
-
-void UART_string_ready_clear(){
-	uart_string_ready = 0;
-}
-
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
 	return USARTx->SR & (USART_SR_RXNE);
 }
@@ -77,6 +67,10 @@ uint8_t UART_data_return(USARTx_typeDef* USARTx){
 
 }
 
+uint8_t Is_Digit(uint8_t c){
+    return (c >= '0' && c <= '9');
+}
+
 uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 	//Checking the length of the string from start to "TU_STOL"
 	//20:02:2026:13:02:TU_STOL (example)
@@ -84,6 +78,18 @@ uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 	while (buffer[len] != '\0') len++;
 	if (len < 17) {
 		return 0;
+	}
+
+	//Check for ':' symbol to be on the expected positions
+	if(buffer[2] != ':' || buffer[5] != ':' || buffer[10] != ':' ||
+	       buffer[13] != ':' || buffer[16] != ':') return 0;
+
+	//Checking if the collected characters are really numbers from 0 to 9.
+	uint8_t digit_positions[] = {0,1,3,4,6,7,8,9,11,12,14,15};
+	for(uint8_t i = 0; i < 12; i++){
+		if(!Is_Digit(buffer[digit_positions[i]])){
+			return 0;
+		}
 	}
 
 	//Parsing the days
