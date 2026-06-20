@@ -14,7 +14,7 @@ uint8_t UART_string_ready();
 void UART_string_ready_clear();
 uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data);
 uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx);
-uint8_t UART_data_return(DoorContext_t* door);
+uint8_t UART_data_return(USARTx_typeDef* USARTx);
 void UART2_init(void);
 void UART4_init(void);
 void UART5_init(void);

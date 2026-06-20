@@ -44,7 +44,7 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 void UART_recieve_handler(DoorContext_t* door){
 	//Check for the flag
 
-		uint8_t ch = UART_data_return(door);
+		uint8_t ch = UART_data_return(door->uart);
 
 		if(ch == '\r' || ch == '\n'){
 			door->rx_buffer[door->rx_index] = '\0';  // Add null terminator
@@ -71,9 +71,9 @@ uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
 }
 
 
-uint8_t UART_data_return(DoorContext_t* door){
+uint8_t UART_data_return(USARTx_typeDef* USARTx){
 
-	return door->uart->DR;
+	return USARTx->DR;
 
 }
 
