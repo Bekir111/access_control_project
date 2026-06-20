@@ -7,7 +7,6 @@
 #include "door_context.h"
 
                 uint8_t		uart_rx_buffer[32];
-volatile		uint8_t		uart_index = 0;
 volatile		uint8_t		uart_string_ready = 0;
 
 
@@ -42,19 +41,19 @@ void UART_set_baud_rate(USARTx_typeDef* USARTx, uint32_t baudRate, uint32_t peri
 	USARTx->BRR = (uint16_t)( (periphClock + (baudRate/2)) / baudRate);
 }
 
-void UART_recieve_handler(USARTx_typeDef* USARTx){
+void UART_recieve_handler(DoorContext_t* door){
 	//Check for the flag
 
-		uint8_t ch = UART_data_return(USARTx);
+		uint8_t ch = UART_data_return(door);
 
 		if(ch == '\r' || ch == '\n'){
-			uart_rx_buffer[uart_index] = '\0';  // Add null terminator
-			uart_string_ready = 1;                 // Set flag
-            uart_index = 0;
+			door->rx_buffer[door->rx_index] = '\0';  // Add null terminator
+			door->string_ready = 1;                 // Set flag
+            door->rx_index = 0;
 		}
 		else{
-			 uart_rx_buffer[uart_index] = ch;
-			 uart_index++;
+			door->rx_buffer[door->rx_index] = ch;
+			door->rx_index++;
 		}
 
 }
@@ -72,9 +71,9 @@ uint8_t UART_check_RXNE_flag(USARTx_typeDef* USARTx){
 }
 
 
-uint8_t UART_data_return(USARTx_typeDef* USARTx){
+uint8_t UART_data_return(DoorContext_t* door){
 
-	return USARTx->DR;
+	return door->uart->DR;
 
 }
 
@@ -221,18 +220,19 @@ void UART2_init(void){
 
 void UART5_IRQHandler(){
 	if(UART_check_RXNE_flag(UART5)){
-		UART_recieve_handler(UART5);
+		UART_recieve_handler(&doorB);
 	}
 }
 void UART4_IRQHandler(){
 	if(UART_check_RXNE_flag(UART4)){
-		UART_recieve_handler(UART4);
+		UART_recieve_handler(&doorA);
 	}
 }
-
+/*
 void USART2_IRQHandler(void){
 	if(UART_check_RXNE_flag(USART2)){
 		UART_recieve_handler(USART2);
 	}
 
 }
+*/
