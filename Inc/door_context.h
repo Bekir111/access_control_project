@@ -19,4 +19,6 @@ typedef struct{
 
 extern DoorContext_t doorA, doorB;
 
+void Process_Door(DoorContext_t *door);
+
 #endif /* DOOR_CONTEXT_H_ */
