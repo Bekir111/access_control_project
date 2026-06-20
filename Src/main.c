@@ -7,7 +7,7 @@
 #include "i2c_driver.h"
 #include "door_context.h"
 
-static	QR_data_t	qr1_data;
+
 
 DoorContext_t doorA = {
 		.uart = UART4,
@@ -49,13 +49,6 @@ int main(void)
 
 		I2C_multiple_read(I2C1,7,rtc_buffer);
 
-		if(UART_string_ready()){
-			UART_string_ready_clear();
-			if(QR_data_parse(uart_rx_buffer, &qr1_data)){
-				GPIO_write_pin(GPIOA, GPIO_PIN_5,HIGH);
-				TIMx_CNT_ENABLE(TIM6);
-			}
-		}
-
 	}
+
 }

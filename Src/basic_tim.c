@@ -2,6 +2,7 @@
 #include "arm_nvic_driver.h"
 #include "gpio_driver.h"
 #include "rcc_driver.h"
+#include "door_context.h"
 
 void TIM_Init_5sec(){
 	//Enabling clock for TIM6 and TIM7
@@ -61,14 +62,14 @@ void TIMx_CNT_ENABLE(TIMx_typeDef* timer){
 void TIM6_DAC_IRQHandler(void){
 	if(TIMx_UG_FLAG_CHECK(TIM6)){
 		TIM6->SR &= ~(TIMx_SR_UIF);
-		GPIO_write_pin(GPIOA, GPIO_PIN_5,LOW);
+		GPIO_write_pin(doorA.gpio_periph, doorA.gpio_pin,LOW);
 	}
 }
 
 void TIM7_IRQHandler(void){
 	if(TIMx_UG_FLAG_CHECK(TIM7)){
 			TIM7->SR &= ~(TIMx_SR_UIF);
-			GPIO_write_pin(GPIOA, GPIO_PIN_5,LOW);
+			GPIO_write_pin(doorB.gpio_periph, doorB.gpio_pin,LOW);
 	}
 }
 
