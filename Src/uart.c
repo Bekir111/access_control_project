@@ -6,7 +6,7 @@
 #include "arm_nvic_driver.h"
 #include "door_context.h"
 
-
+#define QR_ID "TU_STOL"
 
 
 void UART_enable(USARTx_typeDef* USARTx){
@@ -45,6 +45,9 @@ void UART_recieve_handler(DoorContext_t* door){
 		uint8_t ch = UART_data_return(door->uart);
 
 		if(ch == '\r' || ch == '\n'){
+			if(door->rx_index == 0){
+				return;
+			}
 			door->rx_buffer[door->rx_index] = '\0';  // Add null terminator
 			door->string_ready = 1;                 // Set flag
             door->rx_index = 0;
@@ -71,7 +74,7 @@ uint8_t Is_Digit(uint8_t c){
     return (c >= '0' && c <= '9');
 }
 
-uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
+uint8_t QR_data_parse_check(const uint8_t* buffer, QR_data_t* qr_data){
 	//Checking the length of the string from start to "TU_STOL"
 	//20:02:2026:13:02:TU_STOL (example)
 	uint8_t len = 0;
@@ -80,6 +83,17 @@ uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 		return 0;
 	}
 
+	//Increasing the number of the variable "len" to be at 17-th place to check for valid QR id.
+	len++;
+
+	//Checking for "TU_STOL" in the buffer
+	for(uint8_t i = 0 ; i < 7 ; i++){
+		if(buffer[len] != QR_ID[i]){
+			return 0;
+		}
+		len++;
+		i++;
+	}
 	//Check for ':' symbol to be on the expected positions
 	if(buffer[2] != ':' || buffer[5] != ':' || buffer[10] != ':' ||
 	       buffer[13] != ':' || buffer[16] != ':') return 0;
@@ -119,6 +133,18 @@ uint8_t QR_data_parse(const uint8_t* buffer, QR_data_t* qr_data){
 	//Parsing minutes
 	qr_data->minute = ((buffer[14] - '0') * 10) + (buffer[15] - '0');
 
+	//Checking the ID (TU_STOL)
+	for(uint8_t j = 17; j < 24 ; j++){
+		if(buffer[j] != QR_ID[(j - 17)]){
+			return 0;
+		}
+	}
+
+	//The string must end after 'TU_STOL'
+	if(buffer[24] != '\0' && buffer[24] != '\r' && buffer[24] != '\n'){
+		return 0;
+	}
+
 	return 1;
 
 }
@@ -137,10 +163,10 @@ void UART4_init(void){
 		GPIO_pin_mode(GPIOC, GPIO_PIN_11, AF_MODE);
 
 		//AF selection for PA2
-		GPIO_AF_selection_low(GPIOC, GPIO_PIN_10, AF8);
+		GPIO_AF_selection_high(GPIOC, GPIO_PIN_10, AF8);
 
 		//AF selection for PA3
-		GPIO_AF_selection_low(GPIOC, GPIO_PIN_11, AF8);
+		GPIO_AF_selection_high(GPIOC, GPIO_PIN_11, AF8);
 		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
 		//GPIO_pull_up(GPIOA, GPIO_PIN_3);
 
@@ -174,7 +200,7 @@ void UART5_init(void){
 		GPIO_AF_selection_low(GPIOD, GPIO_PIN_2, AF8);
 
 		//AF selection for PA3
-		GPIO_AF_selection_low(GPIOC, GPIO_PIN_12, AF8);
+		GPIO_AF_selection_high(GPIOC, GPIO_PIN_12, AF8);
 		//Pull up on RX to prevent floating pin. UART RX idle is HIGH
 		//GPIO_pull_up(GPIOA, GPIO_PIN_3);
 

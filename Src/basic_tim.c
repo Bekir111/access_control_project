@@ -59,17 +59,23 @@ void TIMx_CNT_ENABLE(TIMx_typeDef* timer){
 	    timer->CR1 |= TIMx_CR1_CEN;
 }
 
+void TIMx_CNT_DISABLE(TIMx_typeDef* timer){
+	    timer->CR1 &= ~(TIMx_CR1_CEN);
+}
+
 void TIM6_DAC_IRQHandler(void){
 	if(TIMx_UG_FLAG_CHECK(TIM6)){
 		TIM6->SR &= ~(TIMx_SR_UIF);
-		GPIO_write_pin(doorA.gpio_periph, doorA.gpio_pin,LOW);
+		GPIO_write_pin(doorA.gpio_periph, doorA.gpio_granted, LOW);
+		GPIO_write_pin(doorA.gpio_periph, doorA.gpio_denied,  LOW);
 	}
 }
 
 void TIM7_IRQHandler(void){
 	if(TIMx_UG_FLAG_CHECK(TIM7)){
-			TIM7->SR &= ~(TIMx_SR_UIF);
-			GPIO_write_pin(doorB.gpio_periph, doorB.gpio_pin,LOW);
+		TIM7->SR &= ~(TIMx_SR_UIF);
+		GPIO_write_pin(doorB.gpio_periph, doorB.gpio_granted, LOW);
+		GPIO_write_pin(doorB.gpio_periph, doorB.gpio_denied,  LOW);
 	}
 }
 

@@ -4,8 +4,6 @@
 #include "arm_nvic_driver.h"
 #include "ds3231.h"
 
-volatile uint8_t rtc_buffer[7];
-
 #include <stdint.h>
 
 void I2C_write(I2C_typeDef* i2c,
@@ -17,6 +15,8 @@ void I2C_write(I2C_typeDef* i2c,
 {
 
 	volatile uint8_t i;
+
+	while(i2c->SR2 & I2C_SR2_BUSY);
 	//Creating an array to convert the data from decimal to bcd before starting the transmitting
 	uint8_t data_tx[6];
 	data_tx[0] = DEC_TO_BCD(minutes);
@@ -61,6 +61,8 @@ void I2C_write(I2C_typeDef* i2c,
 
 void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 	volatile uint8_t i;
+
+	while(i2c->SR2 & I2C_SR2_BUSY);
 	//1. Set the START bit and ACK bit
 	i2c->CR1 |= I2C_CR1_ACK;
 	i2c->CR1 |= I2C_CR1_START;
@@ -69,6 +71,7 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 
 	//2. Have to read SR1 followed by writing the address of the slave in DR register
 	(void)i2c->SR1;
+	(void)i2c->SR2;
 	//This is read mode
 	i2c->DR = DS3231_ADDR << 1;
 
@@ -103,18 +106,18 @@ void I2C_multiple_read(I2C_typeDef* i2c, uint8_t len, volatile uint8_t* buffer){
 		while(!(i2c->SR1 & I2C_SR1_RxNE));
 		if(i < len - 2){
 			//Reading until reaching the last byte of sequence
-			buffer[i] = BCD_TO_DEC(i2c->DR);
+			buffer[i] = i2c->DR;
 		}
 		else{
 			//When we receive the last byte of data we want to set NACK and generate Stop condition
 			i2c->CR1 &= ~(I2C_CR1_ACK);
 			i2c->CR1 |= I2C_CR1_STOP;
-			buffer[i] = BCD_TO_DEC(i2c->DR);
+			buffer[i] = i2c->DR;
 		}
 	}
 
 	while(!(i2c->SR1 & I2C_SR1_RxNE));
-	buffer[len - 1] = BCD_TO_DEC(i2c->DR);
+	buffer[len - 1] = i2c->DR;
 
 }
 
@@ -124,28 +127,26 @@ void I2C_init(I2C_typeDef* i2c){
 
 	//Enabling the clock for B peripheral
 	RCC_GPIOB_clock_enable();
-	//Enabling clock for the I2C1
-	RCC_I2C1_clock_enable();
 
 	//Setting GPIO's for Alternate function mode
-	GPIO_pin_mode(GPIOB, GPIO_PIN_8, AF_MODE);
-	GPIO_pin_mode(GPIOB, GPIO_PIN_9, AF_MODE);
+	GPIO_pin_mode(GPIOB, GPIO_PIN_6, AF_MODE);
+	GPIO_pin_mode(GPIOB, GPIO_PIN_7, AF_MODE);
 
 	//Setting the output type for open-drain
-	GPIO_output_type(GPIOB, GPIO_PIN_8, OTYPE_OD);
-	GPIO_output_type(GPIOB, GPIO_PIN_9, OTYPE_OD);
+	GPIO_output_type(GPIOB, GPIO_PIN_6, OTYPE_OD);
+	GPIO_output_type(GPIOB, GPIO_PIN_7, OTYPE_OD);
 
 	//Setting the pull up resistor by software. Will be added physical pull up on the PCB to ensure that
 	//SCL and SDA lines will be pulled high and pulled low only via hardware that uses I2C lines
-	GPIO_pull_up(GPIOB, GPIO_PIN_8);
-	GPIO_pull_up(GPIOB, GPIO_PIN_9);
 
 	//Selecting AF4 for the GPIO's
 	//I2C1_SCL
-	GPIO_AF_selection_high(GPIOB, GPIO_PIN_8, AF4);
+	GPIO_AF_selection_low(GPIOB, GPIO_PIN_6, AF4);
 	//I2C1_SDA
-	GPIO_AF_selection_high(GPIOB, GPIO_PIN_9, AF4);
+	GPIO_AF_selection_low(GPIOB, GPIO_PIN_7, AF4);
 
+	//Enabling clock for the I2C1
+	RCC_I2C1_clock_enable();
 
 	//Reset the I2C
 	i2c->CR1 |= I2C_CR1_SWRST;
@@ -173,25 +174,10 @@ void I2C_init(I2C_typeDef* i2c){
 	 */
 	i2c->TRISE = 17;
 
-	/*
-	 * This section is commented because first i will make the I2C work with polling. After testing
-	 * and confirming that the data transfers are successful, then
-	 */
-	/*Enable interrupts
-	i2c->CR2 &= ~(I2C_CR2_ITBUFEN);
-	i2c->CR2 |= (I2C_CR2_ITBUFEN);
-	i2c->CR2 &= ~(I2C_CR2_ITERREN);
-	i2c->CR2 |= (I2C_CR2_ITERREN);
-	i2c->CR2 &= ~(I2C_CR2_ITEVTEN);
-	i2c->CR2 |= (I2C_CR2_ITEVTEN);*/
 
 	//Peripheral enable
 	i2c->CR1 |= I2C_CR1_PE;
 
-	/*NVIC_EnableIRQ(IRQ_I2C1_EV);
-	NVIC_EnableIRQ(IRQ_I2C1_ER);
-	NVIC_SetPriority(IRQ_I2C1_EV, 2);
-	NVIC_SetPriority(IRQ_I2C1_ER, 2);*/
 }
 
 void I2C1_EV_IRQHandler(void){

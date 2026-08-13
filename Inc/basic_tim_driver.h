@@ -8,6 +8,6 @@
 void TIM_Init_5sec();
 uint8_t TIMx_UG_FLAG_CHECK(TIMx_typeDef* timer);
 void TIMx_CNT_ENABLE(TIMx_typeDef* timer);
-
+void TIMx_CNT_DISABLE(TIMx_typeDef* timer);
 
 #endif /* BASIC_TIM_DRIVER_H_ */

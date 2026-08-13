@@ -14,7 +14,8 @@ DoorContext_t doorA = {
 		.tim = TIM6,
 		.string_ready = 0,
 		.gpio_periph = GPIOC,
-		.gpio_pin = GPIO_PIN_6
+		.gpio_granted = GPIO_PIN_6,
+		.gpio_denied = GPIO_PIN_7
 	};
 
 DoorContext_t doorB = {
@@ -22,7 +23,9 @@ DoorContext_t doorB = {
 		.tim = TIM7,
 		.string_ready = 0,
 		.gpio_periph = GPIOC,
-		.gpio_pin = GPIO_PIN_7
+		.gpio_granted = GPIO_PIN_8,
+		.gpio_denied = GPIO_PIN_9
+
 	};
 
 int main(void)
@@ -30,8 +33,6 @@ int main(void)
 	//GPIO's initialization
 	GPIOs_init();
 
-	//USART2 initialization
-	UART2_init();
 	//UART4 and UART5 initialization
 	UART5_init();
 	UART4_init();
@@ -43,11 +44,12 @@ int main(void)
 	I2C_init(I2C1);
 
 	//Testing write method for I2C
-	I2C_write(I2C1, 26, 5, 7, 14, 1);
+	I2C_write(I2C1, 26, 7, 22, 10, 12);
 
 	while(1){
 
-		I2C_multiple_read(I2C1,7,rtc_buffer);
+		Process_Door(&doorA);
+		Process_Door(&doorB);
 
 	}
 
